@@ -1,11 +1,66 @@
-import { ThemedText } from "@/components/themed-text";
-import React from "react";
-import { View } from "react-native";
+import { CarouselImages } from "@/assets/data";
+import { VStack } from "@/components/ui/vstack";
+import { Image } from "expo-image";
+import React, { useEffect, useRef, useState } from "react";
+import { Pressable, Text, View } from "react-native";
+import PagerView from "react-native-pager-view";
 
-export default function index() {
+const blurhash =
+  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
+
+export default function Index() {
+  const pagerRef = useRef<PagerView>(null);
+  const [page, setPage] = useState(0);
+
+  // Auto-slide every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const nextPage = (page + 1) % CarouselImages.length;
+      pagerRef.current?.setPage(nextPage);
+      setPage(nextPage);
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [page]);
+
   return (
-    <View>
-      <ThemedText>index</ThemedText>
+    <View className="flex-1 bg-gray-100">
+      <PagerView
+        ref={pagerRef}
+        style={{ height: 250, width: "100%" }}
+        initialPage={0}
+        onPageSelected={(e) => setPage(e.nativeEvent.position)}
+      >
+        {CarouselImages.map((item) => (
+          <View key={item.id} className="items-center justify-center">
+            <Image
+              style={{ width: "100%", height: 250 }}
+              source={item.image}
+              placeholder={{ blurhash }}
+              contentFit="cover"
+              transition={1000}
+            />
+          </View>
+        ))}
+      </PagerView>
+
+      {/* Dot Indicator */}
+      <View className="flex-row -mt-8 items-center justify-center">
+        {CarouselImages.map((_, index) => (
+          <View
+            key={index}
+            className={`size-4 mx-2 rounded-full ${
+              page === index ? "bg-sky-500" : "bg-gray-300" // active vs inactive
+            }`}
+          />
+        ))}
+      </View>
+      <VStack className="mt-8">
+        <Text>Pagodas in Tachileik</Text>
+        <Pressable>
+          <Text>Shwe Dagon</Text>
+        </Pressable>
+      </VStack>
     </View>
   );
 }

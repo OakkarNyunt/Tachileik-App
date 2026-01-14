@@ -1,8 +1,9 @@
-import { CarouselImages } from "@/assets/data";
-import { VStack } from "@/components/ui/vstack";
+import { CarouselImages, Categories } from "@/assets/data";
+import { HStack } from "@/components/ui/hstack";
 import { Image } from "expo-image";
+import { router } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import PagerView from "react-native-pager-view";
 
 const blurhash =
@@ -45,7 +46,7 @@ export default function Index() {
       </PagerView>
 
       {/* Dot Indicator */}
-      <View className="flex-row -mt-8 items-center justify-center">
+      <View className="flex-row -mt-8 mb-8 items-center justify-center">
         {CarouselImages.map((_, index) => (
           <View
             key={index}
@@ -55,12 +56,39 @@ export default function Index() {
           />
         ))}
       </View>
-      <VStack className="mt-8">
-        <Text>Pagodas in Tachileik</Text>
-        <Pressable>
-          <Text>Shwe Dagon</Text>
-        </Pressable>
-      </VStack>
+      <Text className="text-xl font-bold  mx-4 mb-4 text-gray-900">Places</Text>
+      <ScrollView showsVerticalScrollIndicator={false} className="mx-4">
+        {/* Section Title */}
+
+        {Categories.map((item) => (
+          <Pressable
+            key={item.id}
+            className="mb-4"
+            onPress={() =>
+              router.navigate({
+                pathname: "/details/test",
+                params: { id: item.id },
+              })
+            }
+          >
+            <HStack className="items-center bg-white rounded-xl shadow-md p-4 mx-2">
+              {/* Icon */}
+              <Image
+                style={{ width: 48, height: 48, borderRadius: 12 }}
+                source={item.icon}
+                placeholder={{ blurhash }}
+                contentFit="cover"
+                transition={500}
+              />
+
+              {/* Title */}
+              <Text className="ml-4 text-base font-semibold text-gray-800">
+                {item.title}
+              </Text>
+            </HStack>
+          </Pressable>
+        ))}
+      </ScrollView>
     </View>
   );
 }

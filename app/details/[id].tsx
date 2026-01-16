@@ -8,17 +8,17 @@ const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 export default function ChildPage() {
-  const { childId } = useLocalSearchParams<{ childId?: string }>();
+  const { id } = useLocalSearchParams<{ id?: string }>();
 
   // Find the child object by searching all categories
   const child = Categories.flatMap((c) => c.children ?? []).find(
-    (ch) => ch.id === Number(childId)
+    (ch) => ch.id === Number(id)
   );
 
   if (!child) {
     return (
       <View className="flex-1 items-center justify-center">
-        <Text className="text-lg">No child found for ID: {childId}</Text>
+        <Text className="text-lg">No child found for ID: {id}</Text>
       </View>
     );
   }

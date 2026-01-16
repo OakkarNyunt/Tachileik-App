@@ -34,7 +34,7 @@ export default function Test() {
               onPress={() =>
                 router.push({
                   pathname: "/details/[id]",
-                  params: { childId: child.id },
+                  params: { id: child.id },
                 })
               }
               className="w-[48%] mb-4"
